@@ -43,11 +43,11 @@ public final class ReservationService {
     }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
-
+        return (Reservation) null;
     }
 
     public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
-
+        return (Collection<IRoom>) null;
     }
 
     public Collection<Reservation> getCustomersReservation(Customer customer) {

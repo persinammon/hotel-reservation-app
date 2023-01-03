@@ -11,7 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 
 
 public class ModelTest {
@@ -101,7 +103,7 @@ public class ModelTest {
     public void equalsCustomer_returnsTrue() {
         Customer cust1 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
         Customer cust2 = new Customer("Jolly", "Denim", "jennydeer@gmail.com");
-        assertTrue(cust1.equals(cust2));
+        assertEquals(cust1, cust2);
     }
 
     @Test
@@ -109,7 +111,7 @@ public class ModelTest {
     public void notEqualsCustomer_returnsFalse() {
         Customer cust1 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
         Customer cust2 = new Customer("Joy", "Deer", "joydeer@gmail.com");
-        assertFalse(cust1.equals(cust2));
+        assertNotEquals(cust1, cust2);
     }
 
     @Test
@@ -117,7 +119,7 @@ public class ModelTest {
     public void equalsRoom_returnsTrue() {
         Room room1 = new Room("400", 5.0, RoomType.DOUBLE);
         Room room2 = new Room("400", 5.0, RoomType.DOUBLE);
-        assertTrue(room1.equals(room2));
+        assertEquals(room1, room2);
     }
 
     @Test
@@ -125,7 +127,7 @@ public class ModelTest {
     public void notEqualsRoom_returnsFalse() {
         Room room1 = new Room("400", 5.0, RoomType.DOUBLE);
         Room room2 = new Room("401", 5.0, RoomType.DOUBLE);
-        assertFalse(room1.equals(room2));
+        assertNotEquals(room1, room2);
     }
 
     /** Hashing functions were overridden, but relying on hashCode function in implementation

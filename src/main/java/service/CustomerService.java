@@ -20,7 +20,7 @@ public final class CustomerService {
     }
 
     public void addCustomer(String email, String firstName, String lastName) throws Exception {
-        Customer potentialCustomer = new Customer(email, firstName, lastName);
+        Customer potentialCustomer = new Customer(firstName, lastName, email);
         if (!customers.contains(potentialCustomer)) {
             customers.add(potentialCustomer);
         } else {
