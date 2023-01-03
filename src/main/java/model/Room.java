@@ -40,7 +40,7 @@ public class Room implements IRoom {
         if ((obj == null) || !(obj instanceof Room))
             return false;
         Room roomObj = (Room) obj;
-        return this.roomNumber == roomObj.roomNumber;
+        return this.roomNumber == roomObj.getRoomNumber();
     }
 
     @Override

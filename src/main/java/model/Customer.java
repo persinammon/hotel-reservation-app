@@ -20,9 +20,11 @@ public class Customer {
         this.email = email;
     }
 
-    public final String getEmail() {
-        return email;
-    }
+    public final String getEmail() {return this.email; }
+
+    public final String getFirstName() {return this.firstName;}
+
+    public final String getLastName() {return this.lastName;}
 
     @Override
     public String toString() {
@@ -38,7 +40,7 @@ public class Customer {
         if ((obj == null) || !(obj instanceof Customer))
             return false;
         Customer custObj = (Customer) obj;
-        return this.email == custObj.email;
+        return this.email == custObj.getEmail();
     }
 
     @Override
