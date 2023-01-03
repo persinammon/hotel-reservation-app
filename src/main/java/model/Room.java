@@ -33,4 +33,20 @@ public class Room implements IRoom {
     public boolean isFree() {
         return false;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if ((obj == null) || !(obj instanceof Room))
+            return false;
+        Room roomObj = (Room) obj;
+        return this.roomNumber == roomObj.roomNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        String blob = this.roomNumber;
+        return blob.hashCode();
+    }
+
 }

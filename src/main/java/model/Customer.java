@@ -25,4 +25,21 @@ public class Customer {
         return "<Customer: firstName=" + this.firstName + ", lastName="
                 + this.lastName + ", email=" + this.email + ">";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if ((obj == null) || !(obj instanceof Customer))
+            return false;
+        Customer custObj = (Customer) obj;
+        return (this.firstName == custObj.firstName) &&
+                (this.lastName == custObj.lastName) &&
+                (this.email == custObj.email);
+    }
+
+    @Override
+    public int hashCode() {
+        String blob = this.firstName + this.lastName + this.email;
+        return blob.hashCode();
+    }
 }
