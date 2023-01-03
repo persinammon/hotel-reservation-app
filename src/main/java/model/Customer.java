@@ -22,7 +22,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer with first name " + this.firstName + ", last name "
-                + this.lastName + ", email " + this.email;
+        return "<Customer: firstName=" + this.firstName + ", lastName="
+                + this.lastName + ", email=" + this.email + ">";
     }
 }

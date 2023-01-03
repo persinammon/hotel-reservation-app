@@ -9,7 +9,7 @@ public class FreeRoom extends Room {
 
     @Override
     public String toString() {
-        return "[Free] " + super.toString();
+        return "Availability: Free, " + super.toString();
     }
 
     @Override

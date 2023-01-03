@@ -17,9 +17,9 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation with customer (" + this.customer + "), room (" + room.toString() +
-                "), check-in date " + this.checkInDate.toString() +
-                ", check-out date " + this.checkOutDate.toString();
+        return "<Reservation:  customer=" + this.customer + ", room=" + room.toString() +
+                ", checkInDate=" + this.checkInDate.toString() +
+                ", checkOutDate=" + this.checkOutDate.toString() + ">";
     }
 
 }

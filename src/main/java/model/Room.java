@@ -14,8 +14,8 @@ public class Room implements IRoom {
 
     @Override
     public String toString() {
-        return "Room with room number " + this.roomNumber + ", price " + ((Double) this.price).toString() +
-                ", room type " + this.enumeration.toString();
+        return "<Room: roomNumber=" + this.roomNumber + ", price=" + ((Double) this.price).toString() +
+                ", roomType=" + this.enumeration.toString() + ">";
     }
 
     public String getRoomNumber() {
