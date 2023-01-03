@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 public class ModelTest {
@@ -22,18 +23,6 @@ public class ModelTest {
         assertNotNull(customer1, "Customer was not created"); //second parameter is an optional failure message
     }
 
-    @Test
-    @DisplayName("Room creation with valid room number works")
-    public void createRoomWorks() {
-
-    }
-
-    @Test
-    @DisplayName("Reservation creation with valid parameters works")
-    public void createReservationWorks() {
-
-    }
-
     @ParameterizedTest
     @CsvSource({
             "John, Doe, johndoe",
@@ -43,11 +32,6 @@ public class ModelTest {
     @DisplayName("Customer creation fails with invalid emails")
     public void createInvalidCustomerEmail_throwsError(String firstName, String lastName, String email) {
         assertThrows(IllegalArgumentException.class, () -> new Customer(firstName, lastName, email));
-    }
-
-    @DisplayName("Unimplemented: Customer creation with null values for names fails")
-    public void createInvalidCustomerName_throwsError() {
-        //fill in
     }
 
     @Test
@@ -99,7 +83,7 @@ public class ModelTest {
         String roomString = room.toString();
         Date checkInDate = new Date();
         try {
-            Thread.sleep(2000); //2 seconds, Date's smallest granularity is by the second
+            Thread.sleep(1000); //1 second, Date's smallest granularity is by the second
         } catch (Exception e) {}
         finally {
             Date checkOutDate = new Date();
@@ -113,27 +97,35 @@ public class ModelTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Equivalent customers equal each other")
     public void equalsCustomer_returnsTrue() {
-
+        Customer cust1 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
+        Customer cust2 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
+        assertTrue(cust1.equals(cust2));
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Nonequivalent customers do not equal each other")
     public void notEqualsCustomer_returnsFalse() {
-
+        Customer cust1 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
+        Customer cust2 = new Customer("Jolly", "Deer", "jennydeer@gmail.com");
+        assertFalse(cust1.equals(cust2));
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Equivalent rooms equal each other")
     public void equalsRoom_returnsTrue() {
-
+        Room room1 = new Room("400", 5.0, RoomType.DOUBLE);
+        Room room2 = new Room("400", 5.0, RoomType.DOUBLE);
+        assertTrue(room1.equals(room2));
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Nonequivalent rooms do not equal each other")
     public void notEqualsRoom_returnsFalse() {
-
+        Room room1 = new Room("400", 5.0, RoomType.DOUBLE);
+        Room room2 = new Room("401", 5.0, RoomType.DOUBLE);
+        assertFalse(room1.equals(room2));
     }
 
     /** Hashing functions were overridden, but relying on hashCode function in implementation
