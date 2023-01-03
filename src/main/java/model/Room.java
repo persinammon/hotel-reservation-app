@@ -2,9 +2,9 @@ package model;
 
 public class Room implements IRoom {
 
-    private String roomNumber;
-    private double price;
-    private RoomType enumeration;
+    private final String roomNumber;
+    private final double price;
+    private final RoomType enumeration;
 
     public Room(String roomNumber, double price, RoomType enumeration) {
         this.roomNumber = roomNumber;
@@ -18,15 +18,15 @@ public class Room implements IRoom {
                 ", roomType=" + this.enumeration.toString() + ">";
     }
 
-    public String getRoomNumber() {
+    public final String getRoomNumber() {
         return this.roomNumber;
     }
 
-    public double getRoomPrice() {
+    public final double getRoomPrice() {
         return this.price;
     }
 
-    public RoomType getRoomType() {
+    public final RoomType getRoomType() {
         return this.enumeration;
     }
 

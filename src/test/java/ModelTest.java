@@ -100,7 +100,7 @@ public class ModelTest {
     @DisplayName("Equivalent customers equal each other")
     public void equalsCustomer_returnsTrue() {
         Customer cust1 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
-        Customer cust2 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
+        Customer cust2 = new Customer("Jolly", "Denim", "jennydeer@gmail.com");
         assertTrue(cust1.equals(cust2));
     }
 
@@ -108,7 +108,7 @@ public class ModelTest {
     @DisplayName("Nonequivalent customers do not equal each other")
     public void notEqualsCustomer_returnsFalse() {
         Customer cust1 = new Customer("Jenny", "Deer", "jennydeer@gmail.com");
-        Customer cust2 = new Customer("Jolly", "Deer", "jennydeer@gmail.com");
+        Customer cust2 = new Customer("Joy", "Deer", "joydeer@gmail.com");
         assertFalse(cust1.equals(cust2));
     }
 

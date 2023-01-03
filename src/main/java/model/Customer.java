@@ -4,9 +4,9 @@ import java.util.regex.Pattern;
 
 public class Customer {
 
-    private String firstName;
-    private String lastName;
-    private String email;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
 
     public Customer(String firstName, String lastName, String email) {
         String emailRegex = "^(.+)@(.+).com$";
@@ -20,6 +20,10 @@ public class Customer {
         this.email = email;
     }
 
+    public final String getEmail() {
+        return email;
+    }
+
     @Override
     public String toString() {
         return "<Customer: firstName=" + this.firstName + ", lastName="
@@ -28,13 +32,13 @@ public class Customer {
 
     @Override
     public boolean equals(Object obj) {
+        /** Only uses email because for customer base emails must be unique - makes
+         * downstream implementation easier. **/
         if (this == obj) return true;
         if ((obj == null) || !(obj instanceof Customer))
             return false;
         Customer custObj = (Customer) obj;
-        return (this.firstName == custObj.firstName) &&
-                (this.lastName == custObj.lastName) &&
-                (this.email == custObj.email);
+        return this.email == custObj.email;
     }
 
     @Override
