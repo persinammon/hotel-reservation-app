@@ -20,7 +20,7 @@ public class ReservationService {
     private Collection<Reservation> reservations;
     private Map<Customer, Collection<Reservation>> customerbookings;
 
-    private Map<IRoom, Collection<Reservation>> roomreservations;
+    private Map<String, Collection<Reservation>> roomreservations;
 
 
 
@@ -28,7 +28,7 @@ public class ReservationService {
         rooms = new HashSet<IRoom>();
         reservations = new HashSet<Reservation>();
         customerbookings = new HashMap<Customer, Collection<Reservation>>();
-        roomreservations = new HashMap<IRoom, Collection<Reservation>>();
+        roomreservations = new HashMap<String, Collection<Reservation>>();
     }
 
     private CustomerService testCustomerService;
@@ -39,7 +39,7 @@ public class ReservationService {
         rooms = new HashSet<IRoom>();
         reservations = new HashSet<Reservation>();
         customerbookings = new HashMap<Customer, Collection<Reservation>>();
-        roomreservations = new HashMap<IRoom, Collection<Reservation>>();
+        roomreservations = new HashMap<String, Collection<Reservation>>();
         testCustomerService = customerServiceMock;
     }
 
@@ -75,8 +75,8 @@ public class ReservationService {
         if (cs.getCustomer(customer.getEmail()).isEmpty()) throw new Exception("Customer account does not exist.");
         if (!rooms.contains(room)) throw new Exception("Room does not exist.");
         if (checkInDate.after(checkOutDate)) throw new Exception("Reservation dates are invalid.");
-        if (roomreservations.get(room) != null) {
-            for (Reservation r : roomreservations.get(room)) {
+        if (roomreservations.get(room.getRoomNumber()) != null) {
+            for (Reservation r : roomreservations.get(room.getRoomNumber())) {
                 Date oldcheckIn = r.getCheckInDate();
                 Date oldcheckOut = r.getCheckOutDate();
                 if ((checkInDate.after(oldcheckIn) && checkOutDate.before(oldcheckOut)) ||
@@ -90,22 +90,22 @@ public class ReservationService {
         /**
          * Adding to the data structures reservations, roomreservations, and customerbookings is atomic.
          */
-        reservations.add(res);
+        this.reservations.add(res);
 
-        if (roomreservations.get(room) != null) {
-            roomreservations.get(room).add(res);
+        if (this.roomreservations.get(room.getRoomNumber()) != null) {
+            this.roomreservations.get(room.getRoomNumber()).add(res);
         } else {
             Collection<Reservation> resSet = new HashSet<Reservation>();
             resSet.add(res);
-            roomreservations.put(room, resSet);
+            this.roomreservations.put(room.getRoomNumber(), resSet);
         }
 
-        if (customerbookings.get(customer) != null) {
+        if (this.customerbookings.get(customer) != null) {
             customerbookings.get(customer).add(res);
         } else {
             Collection<Reservation> custSet = new HashSet<Reservation>();
             custSet.add(res);
-            customerbookings.put(customer, custSet);
+            this.customerbookings.put(customer, custSet);
         }
 
         return res;
@@ -116,10 +116,20 @@ public class ReservationService {
          *  Assumes previously saved reservation date ranges are sanitized.
          */
         Collection<IRoom> roomsInRange = new HashSet<IRoom>();
-        for (Reservation r : reservations) {
-            if (r.getCheckOutDate().before(checkInDate) || r.getCheckInDate().after(checkOutDate)) {
-                roomsInRange.add(r.getRoom());
+        for (IRoom room : rooms) {
+            Collection<Reservation> roomRes = roomreservations.get(room.getRoomNumber());
+            Boolean isFree = true;
+            if (roomRes != null) {
+                for (Reservation res : roomRes) {
+                    //if check in date is in between the old dates OR check out date between OR it covers the entire span
+                    if ((checkInDate.before(res.getCheckOutDate()) && checkInDate.after(res.getCheckInDate())) ||
+                            (checkOutDate.before(res.getCheckOutDate()) && checkOutDate.after(res.getCheckInDate())) ||
+                            (checkInDate.before(res.getCheckInDate()) && checkOutDate.after(res.getCheckOutDate()))) {
+                        isFree = false;
+                    }
+                }
             }
+            if (isFree) roomsInRange.add(room);
         }
         return roomsInRange;
     }

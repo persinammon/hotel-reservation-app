@@ -152,7 +152,7 @@ public class ServiceTest {
         "1998, 0, 3, 1998, 0, 5, 3", //in between, len(2) and room numbers are 200 and 202
         "1998, 3, 1, 1998, 3, 14, 3", //way out
         "1998, 0, 21, 1998, 1, 2, 2", //overlap with room 1, len(1) and room number is 202
-            "1998, 0, 1, 1998, 1, 28, 0"
+            "1998, 0, 1, 1998, 4, 28, 2"
     })
     @DisplayName("Search rooms given dates works")
     public void findRoomsGivenDates_returnsCorrectRooms(int y1, int m1, int d1, int y2, int m2, int d2, int ans) {
@@ -173,8 +173,6 @@ public class ServiceTest {
         calendar.set(1998, Calendar.FEBRUARY, 14);
         Date checkOut2 = calendar.getTime();
 
-        System.out.println(checkIn1);
-
         Customer customer1 = new Customer("Jojo", "Dodo", "jojododo@hotmail.com");
         try {
             testReservationServiceMock.reserveARoom(customer1, room1, checkIn1, checkOut1);
@@ -193,7 +191,6 @@ public class ServiceTest {
                 .collect(Collectors.toCollection(HashSet::new)));
         possibleAns.put(3, Stream.of(room1, room2)
                 .collect(Collectors.toCollection(HashSet::new)));
-        testReservationServiceMock.printAllReservations();
         assertEquals(possibleAns.get((Integer) ans), testReservationServiceMock.findRooms(checkIn3, checkOut3));
     }
 }
