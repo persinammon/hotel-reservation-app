@@ -66,6 +66,10 @@ public class ReservationService {
         return Optional.ofNullable(foundRoom);
     }
 
+    public Collection<IRoom> getAllRooms() {
+        return (Collection<IRoom>) rooms;
+    }
+
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) throws Exception {
         Reservation res = new Reservation(customer, room, checkInDate,checkOutDate);
 
