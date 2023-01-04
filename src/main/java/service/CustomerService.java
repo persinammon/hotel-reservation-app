@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 
-public final class CustomerService {
+public class CustomerService {
     private static CustomerService customerservice;
     private Set<Customer> customers;
     private CustomerService () { customers = new HashSet<Customer>(); }

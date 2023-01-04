@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Date;
 
 
-public final class ReservationService {
+public class ReservationService {
 
     private static ReservationService reservationservice;
     private Set<IRoom> rooms;
@@ -22,11 +22,25 @@ public final class ReservationService {
 
     private Map<IRoom, Collection<Reservation>> roomreservations;
 
+
+
     private ReservationService () {
         rooms = new HashSet<IRoom>();
         reservations = new HashSet<Reservation>();
         customerbookings = new HashMap<Customer, Collection<Reservation>>();
         roomreservations = new HashMap<IRoom, Collection<Reservation>>();
+    }
+
+    private CustomerService testCustomerService;
+    public ReservationService(CustomerService customerServiceMock) {
+        /**
+         *  This is a public facing constructor for unit testing with a mock.
+         */
+        rooms = new HashSet<IRoom>();
+        reservations = new HashSet<Reservation>();
+        customerbookings = new HashMap<Customer, Collection<Reservation>>();
+        roomreservations = new HashMap<IRoom, Collection<Reservation>>();
+        testCustomerService = customerServiceMock;
     }
 
     public static ReservationService getInstance() {
@@ -54,7 +68,10 @@ public final class ReservationService {
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) throws Exception {
         Reservation res = new Reservation(customer, room, checkInDate,checkOutDate);
-        CustomerService cs = CustomerService.getInstance();
+
+        //allows injecting mock class for testing
+        CustomerService cs = (testCustomerService == null) ? CustomerService.getInstance() : testCustomerService;
+
         if (cs.getCustomer(customer.getEmail()).isEmpty()) throw new Exception("Customer account does not exist.");
         if (!rooms.contains(room)) throw new Exception("Room does not exist.");
         if (checkInDate.after(checkOutDate)) throw new Exception("Reservation dates are invalid.");
