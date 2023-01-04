@@ -30,6 +30,7 @@ public final class AdminResource {
 
 
     public void addRoom(List<IRoom> rooms) {
+        System.out.println(rooms);
         for (IRoom room : rooms) {
             try {
                 reservationservice.addRoom(room);

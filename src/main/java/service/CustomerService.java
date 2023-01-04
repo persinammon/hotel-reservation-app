@@ -31,7 +31,7 @@ public class CustomerService {
     public Optional<Customer> getCustomer(String customerEmail) {
         Customer foundCustomer = null;
         for (Customer c : customers) {
-            if (c.getEmail() == customerEmail) foundCustomer = c;
+            if (c.getEmail().equals(customerEmail)) foundCustomer = c;
         }
         return Optional.ofNullable(foundCustomer);
     }

@@ -67,7 +67,7 @@ public class ReservationService {
     }
 
     public Collection<IRoom> getAllRooms() {
-        return (Collection<IRoom>) rooms;
+        return rooms;
     }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) throws Exception {

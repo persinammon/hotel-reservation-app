@@ -74,7 +74,7 @@ public class HotelApplication {
                                     response);
                         } else {
                             System.out.println("What dates would you like to visit our hotel? Please" +
-                                    "enter the dates in the format YYYY-MM-DD to YYYY-MM-DD.");
+                                    " enter the dates in the format \"YYYY-MM-DD to YYYY-MM-DD\" .");
                             String dates = scan.nextLine();
                             String[] splitStr = dates.trim().split("\\s+");
                             String date1String = splitStr[0];
@@ -99,8 +99,8 @@ public class HotelApplication {
                                 System.out.println("The following rooms are available:");
                                 Collection<String> roomNumbers = new HashSet<String>();
                                 for (IRoom room : availableRooms) roomNumbers.add(room.getRoomNumber());
-                                for (IRoom room : availableRooms) System.out.println(room.getRoomNumber() + " $" +
-                                        room.getRoomPrice() + "Per Night Type:" + room.getRoomType().toString() + "" +
+                                for (IRoom room : availableRooms) System.out.println("Room " + room.getRoomNumber() + " $" +
+                                        room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
                                         " Occupancy");
                                 System.out.println("Please pick a room to reserve or hit enter to return to the main menu.");
                                 response = scan.nextLine();
@@ -125,14 +125,14 @@ public class HotelApplication {
                     break;
                 case 2:
                     System.out.println("What is the email associated with your account?");
-                    String email = scan.nextLine();
+                    String email = scan.nextLine().trim();
                     Optional<Customer> customer = hotel.getCustomer(email);
                     if (customer.isPresent()) {
                         System.out.println("Here are your current reservations:");
                         Collection<Reservation> reservations = hotel.getCustomersReservations(email);
                         for (Reservation r : reservations) {
-                            System.out.println("Room " + r.getRoom().getRoomNumber() + "with " +
-                                    r.getRoom().getRoomType().toString() + "occupancy from " +
+                            System.out.println("Room " + r.getRoom().getRoomNumber() + " with " +
+                                    r.getRoom().getRoomType().toString() + " occupancy from " +
                                     r.getCheckInDate().toString() + " to " +
                                     r.getCheckOutDate().toString());
                         }
@@ -161,13 +161,23 @@ public class HotelApplication {
                         break;
                 default: ;
             }
+            if (!runProgram) {
+                break;
+            }
             stringMainMenu();
         }
         System.out.println("---------------------------------------------");
         System.out.println("Thanks for visiting our hotel!");
+        System.out.println("    |      ");
+        System.out.println("  \\ | /     ");
+        System.out.println("   \\*/     ");
+        System.out.println("--**O**--   ");
+        System.out.println("   /*\\      ");
+        System.out.println("  / | \\     ");
+        System.out.println("    |        ");
     }
 
-    public void printAdminMenu(Scanner scan) {
+    private void stringAdminMenu() {
         System.out.println("---------------------------------------------");
         System.out.println("1. See all customers");
         System.out.println("2. See all rooms");
@@ -176,6 +186,10 @@ public class HotelApplication {
         System.out.println("5. Back to Main Menu");
         System.out.println("---------------------------------------------");
         System.out.println("Please select a number from the menu options");
+    }
+
+    public void printAdminMenu(Scanner scan) {
+        stringAdminMenu();
         boolean runProgram = true;
         while (runProgram) {
             String response = scan.nextLine();
@@ -223,7 +237,9 @@ public class HotelApplication {
                         } else if (response.equals("Double")) {
                             type = RoomType.DOUBLE;
                         }
+                        Room room = new Room(roomNumber, cost, type);
                         List<IRoom> roomList = new ArrayList<IRoom>();
+                        roomList.add(room);
                         admin.addRoom(roomList);
                         System.out.println("Room added.");
                     }
@@ -234,6 +250,7 @@ public class HotelApplication {
                     break;
                 default: ;
             }
+            stringAdminMenu();
         }
     }
 

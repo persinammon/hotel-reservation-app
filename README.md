@@ -9,10 +9,11 @@ with users. No database was used, instead the Singleton design pattern guarantee
 one instance of a class and data was persisted using a Java Collection data structure.
 
 ### Stack 
-- Java version 19. 
-- Apache Maven to build project. Used `mvn archetype:generate` to generate project structure.
-- JUnit 5 to write unit tests.
-- IntelliJ is the recommended IDE for running this code.
+- Java version 19
+- Apache Maven to build project. Used `mvn archetype:generate` to generate project structure
+- JUnit 5 to write unit tests
+- Mockito to mock Service class
+- IntelliJ is the recommended IDE for running this code
 
 
 ### Note on Branching History
