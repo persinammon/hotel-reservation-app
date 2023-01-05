@@ -85,7 +85,9 @@ public class ReservationService {
                 Date oldcheckOut = r.getCheckOutDate();
                 if ((checkInDate.after(oldcheckIn) && checkOutDate.before(oldcheckOut)) ||
                         (checkInDate.before(oldcheckIn) && checkOutDate.after(oldcheckIn)) ||
-                        (checkInDate.after(oldcheckIn) && checkInDate.before(oldcheckOut))) {
+                        (checkInDate.after(oldcheckIn) && checkInDate.before(oldcheckOut)) ||
+                        (checkInDate.equals(oldcheckIn)) ||
+                        (checkOutDate.equals(oldcheckOut))) {
                     throw new Exception("Room is booked for those dates.");
                 }
             }

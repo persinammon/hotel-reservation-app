@@ -82,39 +82,39 @@ public class HotelApplication {
                             String[] splitdate1 = date1String.split("-");
                             String[] splitdate2 = date2String.split("-");
 
-                            /**
-                             *  Implement handling invalid input here.
-                             */
-                            calendar.set(Integer.parseInt(splitdate1[0]), Integer.parseInt(splitdate1[1]),
-                                    Integer.parseInt(splitdate1[2]));
-                            Date checkIn = calendar.getTime();
-                            calendar.set(Integer.parseInt(splitdate2[0]), Integer.parseInt(splitdate2[1]),
-                                    Integer.parseInt(splitdate2[2]));
-                            Date checkOut = calendar.getTime();
-
-                            Collection<IRoom> availableRooms = hotel.findARoom(checkIn, checkOut);
-                            if (availableRooms.size() == 0) {
-                                System.out.println("Sorry, there are no available rooms during that time period.");
-                            } else {
-                                System.out.println("The following rooms are available:");
-                                Collection<String> roomNumbers = new HashSet<String>();
-                                for (IRoom room : availableRooms) roomNumbers.add(room.getRoomNumber());
-                                for (IRoom room : availableRooms) System.out.println("Room " + room.getRoomNumber() + " $" +
-                                        room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
-                                        " Occupancy");
-                                System.out.println("Please pick a room to reserve or hit enter to return to the main menu.");
-                                response = scan.nextLine();
-                                if (roomNumbers.contains(response)) {
-                                    try {
-                                        String email = customer.get().getEmail();
-                                        /** Potential crash here. **/
-                                        IRoom room = hotel.getRoom(response).get();
-                                        hotel.bookARoom(email, room, checkIn, checkOut);
-                                        System.out.println("Success! You're booked for " + date1String + " to " + date2String);
-                                    } catch (Exception e) {
-                                        System.out.println("Sorry, the reservation failed to be booked.");
+                            try {
+                                calendar.set(Integer.parseInt(splitdate1[0]), Integer.parseInt(splitdate1[1]),
+                                        Integer.parseInt(splitdate1[2]));
+                                Date checkIn = calendar.getTime();
+                                calendar.set(Integer.parseInt(splitdate2[0]), Integer.parseInt(splitdate2[1]),
+                                        Integer.parseInt(splitdate2[2]));
+                                Date checkOut = calendar.getTime();
+                                Collection<IRoom> availableRooms = hotel.findARoom(checkIn, checkOut);
+                                if (availableRooms.size() == 0) {
+                                    System.out.println("Sorry, there are no available rooms during that time period.");
+                                } else {
+                                    System.out.println("The following rooms are available:");
+                                    Collection<String> roomNumbers = new HashSet<String>();
+                                    for (IRoom room : availableRooms) roomNumbers.add(room.getRoomNumber());
+                                    for (IRoom room : availableRooms) System.out.println("Room " + room.getRoomNumber() + " $" +
+                                            room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
+                                            " Occupancy");
+                                    System.out.println("Please pick a room to reserve or hit enter to return to the main menu.");
+                                    response = scan.nextLine();
+                                    if (roomNumbers.contains(response)) {
+                                        try {
+                                            String email = customer.get().getEmail();
+                                            /** Potential crash here. **/
+                                            IRoom room = hotel.getRoom(response).get();
+                                            hotel.bookARoom(email, room, checkIn, checkOut);
+                                            System.out.println("Success! You're booked for " + date1String + " to " + date2String);
+                                        } catch (Exception e) {
+                                            System.out.println("Sorry, the reservation failed to be booked.");
+                                        }
                                     }
                                 }
+                            } catch (Exception e) {
+                                System.out.println("Please enter dates in the requested format.");
                             }
                         }
                     } else if (response.equals("N")) {
@@ -228,20 +228,24 @@ public class HotelApplication {
                         String roomNumber = response;
                         System.out.println("Cost per night (USD):");
                         response = scan.nextLine();
-                        Double cost = Double.valueOf(response);
-                        System.out.println("Occupancy type (Single/Double):");
-                        response = scan.nextLine();
-                        RoomType type = RoomType.SINGLE;
-                        if (response.equals("Single")) {
-                            type = RoomType.SINGLE;
-                        } else if (response.equals("Double")) {
-                            type = RoomType.DOUBLE;
+                        try {
+                            Double cost = Double.valueOf(response);
+                            System.out.println("Occupancy type (Single/Double):");
+                            response = scan.nextLine();
+                            RoomType type = RoomType.SINGLE;
+                            if (response.equals("Single")) {
+                                type = RoomType.SINGLE;
+                            } else if (response.equals("Double")) {
+                                type = RoomType.DOUBLE;
+                            }
+                            Room room = new Room(roomNumber, cost, type);
+                            List<IRoom> roomList = new ArrayList<IRoom>();
+                            roomList.add(room);
+                            admin.addRoom(roomList);
+                            System.out.println("Room added.");
+                        } catch (Exception e) {
+                            System.out.println("Please enter a valid price value.");
                         }
-                        Room room = new Room(roomNumber, cost, type);
-                        List<IRoom> roomList = new ArrayList<IRoom>();
-                        roomList.add(room);
-                        admin.addRoom(roomList);
-                        System.out.println("Room added.");
                     }
                     break;
                 case 5:
