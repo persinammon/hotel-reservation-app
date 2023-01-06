@@ -128,9 +128,14 @@ public class ReservationService {
             if (roomRes != null) {
                 for (Reservation res : roomRes) {
                     //if check in date is in between the old dates OR check out date between OR it covers the entire span
-                    if ((checkInDate.before(res.getCheckOutDate()) && checkInDate.after(res.getCheckInDate())) ||
-                            (checkOutDate.before(res.getCheckOutDate()) && checkOutDate.after(res.getCheckInDate())) ||
-                            (checkInDate.before(res.getCheckInDate()) && checkOutDate.after(res.getCheckOutDate()))) {
+                    Date oldCheckIn = res.getCheckInDate();
+                    Date oldCheckOut = res.getCheckOutDate();
+                    if ((checkInDate.before(oldCheckOut) && checkInDate.after(oldCheckIn)) ||
+                            (checkOutDate.before(oldCheckOut) && checkOutDate.after(oldCheckIn)) ||
+                            (checkInDate.before(oldCheckIn) && checkOutDate.after(oldCheckOut)) ||
+                            (checkInDate.equals(oldCheckIn)) ||
+                            (checkOutDate.equals(oldCheckOut))
+                            ) {
                         isFree = false;
                     }
                 }

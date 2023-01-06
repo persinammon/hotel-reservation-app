@@ -83,28 +83,79 @@ public class HotelApplication {
                             String[] splitdate2 = date2String.split("-");
 
                             try {
-                                calendar.set(Integer.parseInt(splitdate1[0]), Integer.parseInt(splitdate1[1]),
+                                calendar.set(Integer.parseInt(splitdate1[0]), Integer.parseInt(splitdate1[1])-1,
                                         Integer.parseInt(splitdate1[2]));
                                 Date checkIn = calendar.getTime();
-                                calendar.set(Integer.parseInt(splitdate2[0]), Integer.parseInt(splitdate2[1]),
+                                calendar.set(Integer.parseInt(splitdate2[0]), Integer.parseInt(splitdate2[1])-1,
                                         Integer.parseInt(splitdate2[2]));
                                 Date checkOut = calendar.getTime();
                                 Collection<IRoom> availableRooms = hotel.findARoom(checkIn, checkOut);
                                 if (availableRooms.size() == 0) {
                                     System.out.println("Sorry, there are no available rooms during that time period.");
+                                    calendar.set(Integer.parseInt(splitdate1[0]), Integer.parseInt(splitdate1[1])-1,
+                                            Integer.parseInt(splitdate1[2]));
+                                    calendar.add(Calendar.DAY_OF_MONTH, 7);
+                                    Date newCheckIn = calendar.getTime();
+                                    calendar.set(Integer.parseInt(splitdate2[0]), Integer.parseInt(splitdate2[1])-1,
+                                            Integer.parseInt(splitdate2[2]));
+                                    calendar.add(Calendar.DAY_OF_MONTH, 7);
+                                    Date newCheckOut = calendar.getTime();
+                                    Collection<IRoom> availableAlternativeRooms = hotel.findARoom(newCheckIn, newCheckOut);
+                                    if (availableAlternativeRooms.size() == 0) {
+                                        System.out.println("Our system searched for rooms on alternative dates and " +
+                                                "was unable to find any.");
+                                    } else {
+                                        System.out.println("Our system has searched for rooms on alternative dates and" +
+                                                " has found the following:");
+                                        System.out.println("The following rooms are available:");
+                                        Collection<String> roomNumbers = new HashSet<String>();
+                                        for (IRoom room : availableAlternativeRooms) {
+                                            roomNumbers.add(room.getRoomNumber());
+                                            if (room.isFree()) {
+                                                System.out.println("This Room is Free!: Room " + room.getRoomNumber() + " $" +
+                                                        room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
+                                                        " Occupancy");
+                                            } else {
+                                                System.out.println("Room " + room.getRoomNumber() + " $" +
+                                                        room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
+                                                        " Occupancy");
+                                            }
+                                        }
+                                        System.out.println("Please pick a room to reserve or hit enter to return to the main menu.");
+                                        response = scan.nextLine();
+                                        if (roomNumbers.contains(response)) {
+                                            try {
+                                                String email = customer.get().getEmail();
+                                                /** Potential crash here, depends on accuracy of roomNumbers **/
+                                                IRoom room = hotel.getRoom(response).get();
+                                                hotel.bookARoom(email, room, checkIn, checkOut);
+                                                System.out.println("Success! You're booked for " + date1String + " to " + date2String);
+                                            } catch (Exception e) {
+                                                System.out.println("Sorry, the reservation failed to be booked.");
+                                            }
+                                        }
+                                    }
                                 } else {
                                     System.out.println("The following rooms are available:");
                                     Collection<String> roomNumbers = new HashSet<String>();
-                                    for (IRoom room : availableRooms) roomNumbers.add(room.getRoomNumber());
-                                    for (IRoom room : availableRooms) System.out.println("Room " + room.getRoomNumber() + " $" +
-                                            room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
-                                            " Occupancy");
+                                    for (IRoom room : availableRooms) {
+                                        roomNumbers.add(room.getRoomNumber());
+                                        if (room.isFree()) {
+                                            System.out.println("This Room is Free!: Room " + room.getRoomNumber() + " $" +
+                                                    room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
+                                                    " Occupancy");
+                                        } else {
+                                            System.out.println("Room " + room.getRoomNumber() + " $" +
+                                                    room.getRoomPrice() + " Per Night Type: " + room.getRoomType().toString() + "" +
+                                                    " Occupancy");
+                                        }
+                                    }
                                     System.out.println("Please pick a room to reserve or hit enter to return to the main menu.");
                                     response = scan.nextLine();
                                     if (roomNumbers.contains(response)) {
                                         try {
                                             String email = customer.get().getEmail();
-                                            /** Potential crash here. **/
+                                            /** Potential crash here, depends on accuracy of roomNumbers. **/
                                             IRoom room = hotel.getRoom(response).get();
                                             hotel.bookARoom(email, room, checkIn, checkOut);
                                             System.out.println("Success! You're booked for " + date1String + " to " + date2String);
@@ -198,6 +249,7 @@ public class HotelApplication {
                 i = Integer.valueOf(response);
             } catch (Exception e) {
                 System.out.println("Sorry, that is not a valid response.");
+                i = 0;
             }
             switch (i) {
                 case 1:
@@ -226,25 +278,30 @@ public class HotelApplication {
                         System.out.println("The room is already entered.");
                     } else {
                         String roomNumber = response;
-                        System.out.println("Cost per night (USD):");
-                        response = scan.nextLine();
                         try {
-                            Double cost = Double.valueOf(response);
-                            System.out.println("Occupancy type (Single/Double):");
+                            Integer roomNumberInt = Integer.parseInt(roomNumber);
+                            System.out.println("Cost per night (USD):");
                             response = scan.nextLine();
-                            RoomType type = RoomType.SINGLE;
-                            if (response.equals("Single")) {
-                                type = RoomType.SINGLE;
-                            } else if (response.equals("Double")) {
-                                type = RoomType.DOUBLE;
+                            try {
+                                Double cost = Double.valueOf(response);
+                                System.out.println("Occupancy type (Single/Double):");
+                                response = scan.nextLine();
+                                RoomType type = RoomType.SINGLE;
+                                if (response.equals("Single")) {
+                                    type = RoomType.SINGLE;
+                                } else if (response.equals("Double")) {
+                                    type = RoomType.DOUBLE;
+                                }
+                                IRoom room = (cost.equals((double) 0)) ? new FreeRoom(roomNumber, type) : new Room(roomNumber, cost, type);
+                                List<IRoom> roomList = new ArrayList<IRoom>();
+                                roomList.add(room);
+                                admin.addRoom(roomList);
+                                System.out.println("Room added.");
+                            } catch (Exception e) {
+                                System.out.println("Please enter a valid price value.");
                             }
-                            Room room = new Room(roomNumber, cost, type);
-                            List<IRoom> roomList = new ArrayList<IRoom>();
-                            roomList.add(room);
-                            admin.addRoom(roomList);
-                            System.out.println("Room added.");
                         } catch (Exception e) {
-                            System.out.println("Please enter a valid price value.");
+                            System.out.println("Room number is an invalid value.");
                         }
                     }
                     break;
