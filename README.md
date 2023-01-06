@@ -21,5 +21,6 @@ The test suite in `src/test/java` is in particular very comprehensive.
 
 ### Note on Branching History
 
-`dev` branch is to save changes when convenient, and does not necessarily compile.
-`main` branch always compiles. `dev-src` and `dev-testsuite` are not actively used.
+`dev` branch is to save changes when convenient.
+`main` branch saves commits of major milestones and was attempted to keep as minimal as possible.
+`dev-src` and `dev-testsuite` are not actively used.
