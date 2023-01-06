@@ -77,10 +77,39 @@ public class HotelApplication {
                                     " enter the dates in the format \"YYYY-MM-DD to YYYY-MM-DD\" .");
                             String dates = scan.nextLine();
                             String[] splitStr = dates.trim().split("\\s+");
+                            if (splitStr.length != 3) {
+                                System.out.println("Please input the dates in the specified format.");
+                                break;
+                            }
+
                             String date1String = splitStr[0];
                             String date2String = splitStr[2];
                             String[] splitdate1 = date1String.split("-");
                             String[] splitdate2 = date2String.split("-");
+
+                            if (splitdate1.length != 3 || splitdate2.length != 3) {
+                                System.out.println("Please input the dates in the specified format.");
+                                break;
+                            }
+
+                            try {
+                                Integer.parseInt(splitdate1[0]);
+                                Integer.parseInt(splitdate1[1]);
+                                Integer.parseInt(splitdate1[2]);
+                                Integer.parseInt(splitdate2[0]);
+                                Integer.parseInt(splitdate2[1]);
+                                Integer.parseInt(splitdate2[2]);
+                            } catch (Exception e) {
+                                System.out.println("Please input the dates in the specified format.");
+                                break;
+                            }
+
+                            if (splitdate1[0].length() != 4 || splitdate1[1].length() != 2 ||
+                                splitdate1[2].length() != 2 || splitdate2[0].length() != 4 ||
+                                splitdate2[1].length() != 2 || splitdate2[2].length() != 2) {
+                                System.out.println("Please input the dates in the specified format.");
+                                break;
+                            }
 
                             try {
                                 calendar.set(Integer.parseInt(splitdate1[0]), Integer.parseInt(splitdate1[1])-1,
