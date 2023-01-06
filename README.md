@@ -15,6 +15,10 @@ one instance of a class and data was persisted using a Java Collection data stru
 - Mockito to mock Service class
 - IntelliJ is the recommended IDE for running this code
 
+### Note on Project
+
+The test suite in `src/test/java` is in particular very comprehensive.
+
 ### Note on Branching History
 
 `dev` branch is to save changes when convenient, and does not necessarily compile.
