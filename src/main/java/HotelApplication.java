@@ -65,8 +65,8 @@ public class HotelApplication {
                 case 1:
                     System.out.println("Do you have an account with us? (Y/N)");
                     response = scan.nextLine();
-                    if (response.equals("Y")) {
-                        System.out.println("What is the email associated with your account?");
+                    if (response.equalsIgnoreCase("Y")) {
+                        System.out.println("What is the email associated with your account? E.g. name@domain.com");
                         response = scan.nextLine();
                         Optional<Customer> customer = hotel.getCustomer(response);
                         if (customer.isEmpty()) {
@@ -157,7 +157,7 @@ public class HotelApplication {
                                                 String email = customer.get().getEmail();
                                                 /** Potential crash here, depends on accuracy of roomNumbers **/
                                                 IRoom room = hotel.getRoom(response).get();
-                                                hotel.bookARoom(email, room, checkIn, checkOut);
+                                                hotel.bookARoom(email, room, newCheckIn, newCheckOut);
                                                 System.out.println("Success! You're booked for " + date1String + " to " + date2String);
                                             } catch (Exception e) {
                                                 System.out.println("Sorry, the reservation failed to be booked.");
@@ -197,14 +197,14 @@ public class HotelApplication {
                                 System.out.println("Please enter dates in the requested format.");
                             }
                         }
-                    } else if (response.equals("N")) {
+                    } else if (response.equalsIgnoreCase("N")) {
                         System.out.println("Please create an account with us using the menu option.");
                     } else {
                         System.out.println("Sorry, did not recognize the input. Please select from the options.");
                     }
                     break;
                 case 2:
-                    System.out.println("What is the email associated with your account?");
+                    System.out.println("What is the email associated with your account? Format must be name@domain.com.");
                     String email = scan.nextLine().trim();
                     Optional<Customer> customer = hotel.getCustomer(email);
                     if (customer.isPresent()) {
@@ -226,13 +226,13 @@ public class HotelApplication {
                     String firstName = scan.nextLine();
                     System.out.println("What is your last name?");
                     String lastName = scan.nextLine();
-                    System.out.println("What is the email you would like to register your account under?");
+                    System.out.println("What is the email you would like to register your account under? The format must be name@domain.com.");
                     String emailCurr = scan.nextLine();
                     if (hotel.getCustomer(emailCurr).isPresent()) {
                         System.out.println("The email is already in use. Please try again with a different email.");
                     } else {
                         hotel.createACustomer(emailCurr, firstName, lastName);
-                        System.out.println("A new account has been created! Otherwise, the email is an invalid format.");
+                        System.out.println("A new account has been created!");
                     }
                     break;
                 case 4: printAdminMenu(scan);
@@ -316,9 +316,9 @@ public class HotelApplication {
                                 System.out.println("Occupancy type (Single/Double):");
                                 response = scan.nextLine();
                                 RoomType type = RoomType.SINGLE;
-                                if (response.equals("Single")) {
+                                if (response.equalsIgnoreCase("Single")) {
                                     type = RoomType.SINGLE;
-                                } else if (response.equals("Double")) {
+                                } else if (response.equalsIgnoreCase("Double")) {
                                     type = RoomType.DOUBLE;
                                 }
                                 IRoom room = (cost.equals((double) 0)) ? new FreeRoom(roomNumber, type) : new Room(roomNumber, cost, type);
