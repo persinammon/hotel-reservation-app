@@ -27,7 +27,10 @@ java -jar hotelreservation-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 The test suite in `src/test/java` is in particular very comprehensive.
 For example, there are parameterized unit tests, standard unit tests, and 
-a fake implemented using Mockito.
+a fake implemented using Mockito. Test coverage is 100% class coverage, 
+method coverage ranging from 25% to 86-100%, and line coverage
+ranging from 34% to 92-100%. Tests for getter and setters were not
+written, lowering method coverage percentages.
 
 ### Note on Branching History
 
